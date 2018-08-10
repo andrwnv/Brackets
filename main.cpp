@@ -2,14 +2,25 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-
 #include<stack>
 
 int balance(0);
 char opened[] = "{[(";
 char closed[] = "}})";
+std::stack <char> brackets;
 
-bool check_o(char x){
+bool check_brckts(char x){
+      for( int j=0 ; j < strlen(closed) ; j++){
+          if (x[i]==opened[j]){
+              return true;
+          }
+          else if (x[i]==closed[j]){
+              return false;
+          }
+      }
+}
+
+/*bool check_o(char x){
     for(int i=0 ; i<strlen(opened) ; i++){
        if (x==opened[i]){
            ::balance++;
@@ -25,26 +36,37 @@ bool check_c(char x){
            return false;
        }
     }
-}
+    return
+}*/
 
-bool view(char x[]){
-    stack <char> brackets;
-    for(int i=0 ; i<strlen(x) ; i++){
-        if (check_c(x[i])){
+/*bool check(std::stack<char>& x , char k){
+    for( int i=0 ; i<strlen(closed) ; i++){
+        if(x)
+    }
+}*/
+
+bool view(const char* string){
+    for(int i=0 ; i<strlen(string) ; i++){
+        if (check_c(string[i])){
             if (balance==-1)
                 return false;
+            else if (check(brackets, string[i]))
         }
-        else if (check_o(x[i])){
-            brackets.push(x[i]);
+        else if (check_o(string[i]) and (balance > 0)){
+            brackets.push(string[i]);
+        }
+        else if (check_c(string[i])){
+            if (check(brackets, string[i]))
         }
     }
+    return true;
 }
 
 int main(){
-    char string[100];
-    gets (string);
+    std::string string;
+    std::getline(std::cin, string);
 
-    if (view(string))
+    if (view(string.c_str()))
         std::cout << "True" << std::endl;
     else
         std::cout << "False" << std::endl;
