@@ -4,125 +4,65 @@
 #include <cstdlib>
 #include <stack>
 
-std :: stack <char> o_brackets;
 
-bool search_brckts(const char* string){
-      char opened[] = "{[(";
-      char closed[] = "}})";
-      int c=0;
-      for ( int i = 0 ; i < strlen(string) ; i++ ){
-          for ( int j = 0 ; j < strlen(opened) ; j++ ){
-              if ( opened[j] == string[i] or ( opened[j] == string[i] ) )
-                  c++;
-          }
-      }
-      if ( c > 0 )
-          return true;
-      else
-          return false;
-}
+const char opened[] = "{[(";
+const char closed[] = "}})";
 
-bool check_closed_brckts(const char* string){
-    int balance = 0;
-    char closed[] = "}})";
-    for ( int i = 0 ; i < strlen(string) ; i++ ){
-        for ( int j = 0 ; j < strlen(closed) ; j++ ){
-            if ( string[i] == closed[j] and (balance == 0) )
-                balance--;
-        }
-    }
-    if ( balance < 0 )
-        return true;
-    else
-        return false;
-}
-
-/*bool check(char x , char k){
-    char opened[] = "{[(";
-    char closed[] = "}})";
-    int o , c;
-    for ( int i=0 ; i<strlen(opened) ; i++){
-        if (x==opened[i])
-            o=i;
-        else if (k==closed[i])
-            c=i;
-    }
-    if (o == c){
-        o_brackets.pop();
-        return true;
-    }
-    else
-        return false;
-}*/
-
-bool check_opened_brckts(const char* string){
-    char opened[] = "{[(";
-    char closed[] = "}})";
-    int balance = 0;
-    for ( int i = 0 ; i < strlen(string) ; i++ ){
-        for ( int j = 0 ; j < strlen(opened) ; j++ ){
-            if ( string[i] == opened[j] )
-                o_brackets.push( string[i] );
-                balance++;
-            else{
-                if (search_c_for_o(o_brackets.top() , closed[j] )){
-                    o_brackets.pop();
-                    balance--;
-                }
-            }
-        }
-    }
-    if ( balance == 0 and (o_brackets.empty()) )
-        return true;
-    else
-        return false;
-}
-
-bool search_c_for_o( char opened , char closed ){
-    int balance = 0;
-    char opened[] = "{[(";
-    char closed[] = "}})";
-    for ( int i = 0 ; i < strlen(closed) ; i++ ){
-        if ( (opened == opened[i]) and (closed == closed[i]) )
-            balance++;
-    }
-    if ( balance != 0 )
-        return true;
-    else
-        return false;
-}
-
-/*bool view(const char* string){
-    for(int i=0 ; i<strlen(string) ; i++){
-        if (search_brckts(string[i]))
-            for (int j = 0 ; j<strlen(opened) ; j++){
-
-            }
-        else if (search_brckts(string[i])){
-            if(check(brackets.top(), string[i]))
-                return true;
-            else
-                return false;
-        }
-        else
+bool search_c_for_o( char Opened , char Closed )
+{
+    for ( size_t i = 0 ; i < strlen(closed) ; ++i ){
+        if ( (Opened == opened[i]) and (Closed == closed[i]) )
             return true;
     }
-    return true;
-}*/
+    return false;
+}
+
+bool brckts (const char arrp[], char x )
+{
+    for ( size_t i = 0 ; i < strlen(arrp) ; ++i )
+    {
+        if ( arrp[i] == x )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool search_on_string( const char* string )
+{
+    std :: stack <char> o_brackets;
+
+    for ( size_t i = 0 ; i < strlen(string) ; ++i )
+    {
+        if ( brckts(closed, string[i]) )
+        {
+            if ( o_brackets.empty()  or (not search_c_for_o( o_brackets.top() , string[i] )))
+            {
+                return false;
+            }
+            else
+            {
+                o_brackets.pop();
+            }
+        }
+        else if ( brckts(opened, string[i]) )
+        {
+            o_brackets.push(string[i]);
+        }
+    }
+    return o_brackets.empty();
+}
 
 int main(){
     std::string string;
     std::getline(std::cin, string);
 
-    if ( !search_brckts(string.c_str()) )
-         std :: cout << "True" << std :: endl;
-    else if ( check_closed_brckts(string.c_str()) )
-         std :: cout << "False" << std :: endl;
-    else if ( check_opened_brckts(string.c_str()) )
-         std :: cout << "-----" << std :: endl;
-    else
-         std :: cout << "False" << std :: endl;
-
+    if ( search_on_string(string.c_str()) )
+        std :: cout << true << std :: endl;
+    else{
+        std :: cout << false << std :: endl;
+    }
     system("pause");
     return 0;
 }
