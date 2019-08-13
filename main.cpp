@@ -1,68 +1,55 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
-#include <cstdlib>
 #include <stack>
-
 
 const char opened[] = "{[(";
 const char closed[] = "}})";
 
-bool search_c_for_o( char Opened , char Closed )
+bool isPair( char open_br , char close_br )
 {
-    for ( size_t i = 0 ; i < strlen(closed) ; ++i ){
-        if ( (Opened == opened[i]) and (Closed == closed[i]) )
+    for ( size_t i = 0 ; i < strlen(closed) ; ++i )
+        if ( (open_br == opened[i]) and (close_br == closed[i]) )
             return true;
-    }
+
     return false;
 }
 
-bool brckts (const char arrp[], char x )
+bool searchCharInString (std::string const& string, char x )
 {
-    for ( size_t i = 0 ; i < strlen(arrp) ; ++i )
-    {
-        if ( arrp[i] == x )
-        {
+    for (auto i : string)
+        if (i == x)
             return true;
-        }
-    }
+
     return false;
 }
 
-bool search_on_string( const char* string )
+bool search_on_string( std::string const& string )
 {
-    std :: stack <char> o_brackets;
+    std::stack <char> o_brackets;
 
-    for ( size_t i = 0 ; i < strlen(string) ; ++i )
+    for(auto i : string)
     {
-        if ( brckts(closed, string[i]) )
+        if (searchCharInString(closed, i))
         {
-            if ( o_brackets.empty()  or (not search_c_for_o( o_brackets.top() , string[i] )))
-            {
+            if (o_brackets.empty() or !isPair(o_brackets.top(), i))
                 return false;
-            }
-            else
-            {
-                o_brackets.pop();
-            }
+
+            o_brackets.pop();
         }
-        else if ( brckts(opened, string[i]) )
-        {
-            o_brackets.push(string[i]);
-        }
+        else if (searchCharInString(opened, i))
+            o_brackets.push(i);
     }
+
     return o_brackets.empty();
 }
 
-int main(){
+int main()
+{
     std::string string;
     std::getline(std::cin, string);
 
-    if ( search_on_string(string.c_str()) )
-        std :: cout << true << std :: endl;
-    else{
-        std :: cout << false << std :: endl;
-    }
-    system("pause");
+    std::cout << search_on_string(string) << std::endl;
+
     return 0;
 }
